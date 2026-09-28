@@ -1,0 +1,39 @@
+{
+  "nvml-wrapper": {
+    "packages": [
+      "nvml-wrapper-0.10.0",
+      "nvml-wrapper-sys-0.8.0"
+    ],
+    "sources": {
+      "LICENSE-APACHE": "https://raw.githubusercontent.com/Cldfire/nvml-wrapper/940354559b6131b23734a97050c929483c9b4ad0/LICENSE-APACHE",
+      "LICENSE-MIT": "https://raw.githubusercontent.com/Cldfire/nvml-wrapper/940354559b6131b23734a97050c929483c9b4ad0/LICENSE-MIT"
+    }
+  },
+  "valuable": {
+    "packages": [
+      "valuable-0.1.1"
+    ],
+    "sources": {
+      "LICENSE": "https://raw.githubusercontent.com/tokio-rs/valuable/9efc29b6e58cef28f6566a47aa7e142a55fead77/LICENSE"
+    }
+  },
+  "winapi": {
+    "packages": [
+      "winapi-i686-pc-windows-gnu-0.4.0",
+      "winapi-x86_64-pc-windows-gnu-0.4.0"
+    ],
+    "sources": {
+      "LICENSE-APACHE": "https://raw.githubusercontent.com/retep998/winapi-rs/796a8e6c2971dc2ff1bcff166e6671284f9b5b6b/LICENSE-APACHE",
+      "LICENSE-MIT": "https://raw.githubusercontent.com/retep998/winapi-rs/796a8e6c2971dc2ff1bcff166e6671284f9b5b6b/LICENSE-MIT"
+    }
+  },
+  "zmq-sys": {
+    "packages": [
+      "zmq-sys-0.12.0"
+    ],
+    "sources": {
+      "LICENSE-APACHE": "https://raw.githubusercontent.com/erickt/rust-zmq/92c638a5890a3278830590a2020758514ea369be/LICENSE-APACHE",
+      "LICENSE-MIT": "https://raw.githubusercontent.com/erickt/rust-zmq/92c638a5890a3278830590a2020758514ea369be/LICENSE-MIT"
+    }
+  }
+}

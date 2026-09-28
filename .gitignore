@@ -1,0 +1,23 @@
+/target
+**/*.rs.bk
+*.pdb
+*.swp
+*~
+.DS_Store
+RELEASE_CHANGELOG.md
+vmon.log
+vmon-*.json
+.claude/
+
+# Local credentials and collected data
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+/reports/
+/metrics.json
+/*.html
+/*.jsonl
+/vmon-agent*.log
+/vmon-agent*.pid

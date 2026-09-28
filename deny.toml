@@ -1,0 +1,19 @@
+[advisories]
+ignore = []
+
+[licenses]
+confidence-threshold = 0.8
+allow = [
+    "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "MIT",
+    "BSD-3-Clause", "ISC", "Zlib", "Unicode-3.0", "Unlicense", "BSL-1.0",
+    "CDLA-Permissive-2.0",
+]
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
