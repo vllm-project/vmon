@@ -189,7 +189,27 @@ fn parse_sample_line(line: &str) -> Result<Sample, ParseError> {
     };
 
     // Parse labels between { and }
-    let close_brace = rest.find('}').ok_or_else(|| ParseError::InvalidLine(line.to_string()))?;
+    let mut quoted = false;
+    let mut escaped = false;
+    let close_brace = rest
+        .char_indices()
+        .find_map(|(idx, c)| match c {
+            _ if escaped => {
+                escaped = false;
+                None
+            }
+            '\\' if quoted => {
+                escaped = true;
+                None
+            }
+            '"' => {
+                quoted = !quoted;
+                None
+            }
+            '}' if !quoted => Some(idx),
+            _ => None,
+        })
+        .ok_or_else(|| ParseError::InvalidLine(line.to_string()))?;
     let labels_str = &rest[1..close_brace];
     let after_brace = &rest[close_brace + 1..];
 
@@ -362,6 +382,44 @@ vllm:e2e_request_latency_seconds_count{model_name="example-model"} 50.0
         let input = r#"metric{label="foo\"bar"} 1.0"#;
         let families = parse_prometheus_text(input).unwrap();
         assert_eq!(families[0].samples[0].label("label"), Some("foo\"bar"));
+    }
+
+    #[test]
+    fn test_parse_braces_in_label_values() {
+        for (encoded, expected) in [
+            (r#"example}model"#, "example}model"),
+            (r#"example{model}"#, "example{model}"),
+            (r#"example\"}model"#, "example\"}model"),
+            (r#"example\\}model"#, "example\\}model"),
+            (r#"example\"\\}model"#, "example\"\\}model"),
+        ] {
+            let input = format!(
+                "# TYPE vllm:num_requests_running gauge\n\
+                 vllm:num_requests_running{{model_name=\"{encoded}\",engine=\"0\"}} 15.0\n"
+            );
+            let families = parse_prometheus_text(&input).unwrap();
+            assert_eq!(families.len(), 1);
+            assert_eq!(families[0].metric_type, MetricType::Gauge);
+            let sample = &families[0].samples[0];
+            assert_eq!(sample.label("model_name"), Some(expected));
+            assert_eq!(sample.label("engine"), Some("0"));
+            assert_eq!(sample.value, 15.0);
+        }
+    }
+
+    #[test]
+    fn test_parse_unclosed_labels_returns_error() {
+        for input in [
+            "metric{label=\"unterminated",
+            "metric{label=\"complete\" 1.0",
+            "metric{label=\"unterminated\\",
+            "metric{label=\"unterminated} 1.0",
+        ] {
+            assert!(matches!(
+                parse_prometheus_text(input),
+                Err(ParseError::InvalidLine(_))
+            ));
+        }
     }
 
     #[test]
